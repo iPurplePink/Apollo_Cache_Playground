@@ -1,0 +1,2 @@
+npm install apollo apollo-boost graphql-tag graphql apollo-cache-persist @apollo/react-hooks --save
+npm install react-router-dom node-sass --save
