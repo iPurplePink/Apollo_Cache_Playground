@@ -14,11 +14,30 @@ const GET = gql`
 const Settings: React.FC<any> = (props: any) => {
   console.log("props", props);
   const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const client = useApolloClient();
 
+  const handleUsernameChange = (event: any) => {
+    setUsername(event.target.value);
+  };
+
+  const handlePasswordChange = (event: any) => {
+    setPassword(event.target.value);
+    if (errorMessage) {
+      setErrorMessage("");
+    }
+  };
+
+  const { data, loading, error } = useQuery(GET);
+
   const handleSave = () => {
+    if (password !== data.login.password) {
+      setErrorMessage("Password did not match");
+      return;
+    }
+
     client.writeData({
       data: {
         login: { username, __typename: "login" }
@@ -26,16 +45,6 @@ const Settings: React.FC<any> = (props: any) => {
     });
     props.history.push("/timeline");
   };
-
-  const handleUsernameChange = (event: any) => {
-    setUsername(event.target.value);
-  };
-
-  const handlePasswordChange = (event: any) => {
-    setUsername(event.target.value);
-  };
-
-  const { data, loading, error } = useQuery(GET);
 
   if (loading) {
     return <h1>Loading... </h1>;
